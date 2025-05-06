@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TaskMe</string>
+    <string name="list_kosong">Daftar tugas masih kosong \nTekan tombol + untuk menambahkan</string>
 </resources>
