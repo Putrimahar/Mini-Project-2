@@ -2,4 +2,6 @@
     <string name="app_name">TaskMe</string>
     <string name="list_kosong">Daftar tugas masih kosong \nTekan tombol + untuk menambahkan</string>
     <string name="x_diklik">%1$s diklik!</string>
+    <string name="tambah_task">Tambah tugas</string>
+    <string name="belum_bisa">Belum bisa tambah tugas</string>
 </resources>
