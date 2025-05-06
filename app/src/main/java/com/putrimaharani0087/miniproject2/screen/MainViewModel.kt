@@ -48,4 +48,8 @@ class MainViewModel : ViewModel() {
             "2025-05-21 23:59:59"
         ),
     )
+
+    fun getTugas(id: Long): Task? {
+        return data.find { it.id == id }
+    }
 }
