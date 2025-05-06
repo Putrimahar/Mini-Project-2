@@ -3,7 +3,8 @@
     <string name="list_kosong">Daftar tugas masih kosong \nTekan tombol + untuk menambahkan</string>
     <string name="x_diklik">%1$s diklik!</string>
     <string name="tambah_task">Tambah tugas</string>
-    <string name="belum_bisa">Belum bisa tambah tugas</string>
     <string name="judul">judul</string>
-    <string name="isi_deskripsi">Isi Deskripsi</string>
+    <string name="isi_deskripsi">Deskripsi</string>
+    <string name="kembali">Kembali</string>
+    <string name="simpan">Simpan</string>
 </resources>
