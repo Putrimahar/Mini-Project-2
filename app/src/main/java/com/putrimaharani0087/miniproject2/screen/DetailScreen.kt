@@ -35,9 +35,11 @@ import androidx.navigation.compose.rememberNavController
 import com.putrimaharani0087.miniproject2.R
 import com.putrimaharani0087.miniproject2.ui.theme.MiniProject2Theme
 
+const val KEY_ID_TASK = "idTask"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(navController: NavHostController) {
+fun DetailScreen(navController: NavHostController, id: Long? = null) {
     var judul by remember { mutableStateOf("") }
     var deskripsi by remember { mutableStateOf("") }
 
@@ -56,7 +58,11 @@ fun DetailScreen(navController: NavHostController) {
                     }
                 },
                 title = {
-                    Text(text = stringResource(id = R.string.tambah_task))
+                    if (id == null)
+                        Text(text = stringResource(id = R.string.tambah_task))
+                    else
+                        Text(text = stringResource(R.string.edit_Tugas))
+
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = Color(0xFF8a817c), // warna biru custom
