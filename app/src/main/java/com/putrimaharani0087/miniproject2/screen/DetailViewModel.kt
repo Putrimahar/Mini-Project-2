@@ -20,7 +20,19 @@ class DetailViewModel(private val dao: TaskDao) : ViewModel() {
         }
     }
 
-    fun getTask(id: Long): Task? {
-        return null
+    suspend fun getTask(id: Long): Task? {
+        return dao.getTaskById(id)
+    }
+
+    fun update(id: Long, judul: String, deskripsi: String, deadline: String) {
+        val task = Task(
+            id = id,
+            judul = judul,
+            deskripsi = deskripsi,
+            deadline = deadline
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.update(task)
+        }
     }
 }
