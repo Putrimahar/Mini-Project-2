@@ -10,4 +10,6 @@
     <string name="simpan">Simpan</string>
     <string name="edit_Tugas">Ubah tugas</string>
     <string name="invalid">Judul, deskripsi, dan deadline tidak boleh kosong.</string>
+    <string name="lainnya">Opsi lainnya</string>
+    <string name="hapus">Hapus tugas</string>
 </resources>
