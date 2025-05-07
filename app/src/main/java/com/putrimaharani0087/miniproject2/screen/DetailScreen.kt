@@ -43,7 +43,8 @@ import androidx.navigation.compose.rememberNavController
 import com.putrimaharani0087.miniproject2.R
 import com.putrimaharani0087.miniproject2.ui.theme.MiniProject2Theme
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 const val KEY_ID_TASK = "idTask"
 
@@ -144,7 +145,6 @@ fun FormTugas(
         day
     )
 
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -166,11 +166,11 @@ fun FormTugas(
             value = desc,
             onValueChange = { onDescChange(it) },
             label = { Text(text = stringResource(R.string.isi_deskripsi)) },
-            singleLine = true,
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
             ),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            maxLines = 6
         )
 
         Box(
