@@ -1,7 +1,11 @@
 package com.putrimaharani0087.miniproject2.screen
 
+import android.app.DatePickerDialog
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -36,6 +42,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.putrimaharani0087.miniproject2.R
 import com.putrimaharani0087.miniproject2.ui.theme.MiniProject2Theme
+import java.text.SimpleDateFormat
+import java.util.*
 
 const val KEY_ID_TASK = "idTask"
 
@@ -97,11 +105,11 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
     ) { padding ->
         FormTugas(
             title = judul,
-            onTitleChange = {judul = it},
+            onTitleChange = { judul = it },
             desc = deskripsi,
-            onDescChange = {deskripsi = it},
+            onDescChange = { deskripsi = it },
             deadline = deadline,
-            onDeadlineChange = {deadline = it},
+            onDeadlineChange = { deadline = it },
             modifier = Modifier.padding(padding)
         )
     }
@@ -114,13 +122,38 @@ fun FormTugas(
     deadline: String, onDeadlineChange: (String) -> Unit,
     modifier: Modifier
 ) {
+    val calendar = Calendar.getInstance()
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+    val context = LocalContext.current
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _, selectedYear, selectedMonth, selectedDayOfMonth ->
+            calendar.set(selectedYear, selectedMonth, selectedDayOfMonth)
+
+            val formatter = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID"))
+            val formattedDate = formatter.format(calendar.time)
+
+            onDeadlineChange(formattedDate)
+        },
+        year,
+        month,
+        day
+    )
+
+
     Column(
-        modifier = modifier.fillMaxSize().padding(16.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         OutlinedTextField(
             value = title,
-            onValueChange = {onTitleChange(it)},
+            onValueChange = { onTitleChange(it) },
             label = { Text(text = stringResource(R.string.judul)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
@@ -131,7 +164,7 @@ fun FormTugas(
         )
         OutlinedTextField(
             value = desc,
-            onValueChange = {onDescChange(it)},
+            onValueChange = { onDescChange(it) },
             label = { Text(text = stringResource(R.string.isi_deskripsi)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
@@ -139,18 +172,39 @@ fun FormTugas(
             ),
             modifier = Modifier.fillMaxWidth()
         )
-        OutlinedTextField(
-            value = deadline,
-            onValueChange = {onDeadlineChange(it)},
-            label = { Text(text = stringResource(R.string.isi_deadline)) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Sentences,
-            ),
+
+        Box(
             modifier = Modifier.fillMaxWidth()
-        )
+        ) {
+            OutlinedTextField(
+                value = deadline,
+                onValueChange = {},
+                label = { Text(text = stringResource(R.string.isi_deadline)) },
+                readOnly = true,
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "Pilih tanggal"
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        datePickerDialog.show()
+                    }
+            )
+        }
+
     }
 }
+
 
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
