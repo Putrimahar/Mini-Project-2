@@ -2,6 +2,7 @@ package com.putrimaharani0087.miniproject2.screen
 
 import android.app.DatePickerDialog
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -42,6 +43,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.putrimaharani0087.miniproject2.R
 import com.putrimaharani0087.miniproject2.ui.theme.MiniProject2Theme
+import com.putrimaharani0087.miniproject2.util.ViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -51,7 +53,9 @@ const val KEY_ID_TASK = "idTask"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(navController: NavHostController, id: Long? = null) {
-    val viewModel: MainViewModel = viewModel()
+    val context = LocalContext.current
+    val factory = ViewModelFactory(context)
+    val viewModel: DetailViewModel = viewModel(factory = factory)
 
     var judul by remember { mutableStateOf("") }
     var deskripsi by remember { mutableStateOf("") }
@@ -59,7 +63,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
 
     LaunchedEffect(Unit) {
         if (id == null) return@LaunchedEffect
-        val data = viewModel.getTugas(id) ?: return@LaunchedEffect
+        val data = viewModel.getTask(id) ?: return@LaunchedEffect
         judul = data.judul
         deskripsi = data.deskripsi
         deadline = data.deadline
@@ -92,6 +96,14 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                 ),
                 actions = {
                     IconButton(onClick = {
+                        if (judul == "" || deskripsi == "" || deadline == "") {
+                            Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
+                            return@IconButton
+                        }
+
+                        if (id == null) {
+                            viewModel.insert(judul, deskripsi, deadline)
+                        }
                         navController.popBackStack()
                     }) {
                         Icon(
