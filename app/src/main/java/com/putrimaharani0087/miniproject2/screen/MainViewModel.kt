@@ -1,55 +1,22 @@
 package com.putrimaharani0087.miniproject2.screen
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.putrimaharani0087.miniproject2.database.TaskDao
 import com.putrimaharani0087.miniproject2.model.Task
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 
-class MainViewModel : ViewModel() {
-    val data = listOf(
-        Task(
-            1,
-            "Mengerjakan TP Mobpro",
-            "kerjakan sebelum jam praktikum",
-            "20 Maret 2026"
-        ),
-        Task(
-            2,
-            "Mengerjakan TP Mobpro",
-            "kerjakan sebelum jam praktikum",
-            "20 Maret 2026"
-        ),
-        Task(
-            3,
-            "Mengerjakan TP Mobpro",
-            "kerjakan sebelum jam praktikum",
-            "20 Maret 2026"
-        ),
-        Task(
-            4,
-            "Mengerjakan TP Mobpro",
-            "kerjakan sebelum jam praktikum",
-            "20 Maret 2026"
-        ),
-        Task(
-            5,
-            "Mengerjakan TP Mobpro",
-            "kerjakan sebelum jam praktikum",
-            "20 Maret 2026"
-        ),
-        Task(
-            6,
-            "Mengerjakan TP Mobpro",
-            "kerjakan sebelum jam praktikum",
-            "20 Maret 2026"
-        ),
-        Task(
-            7,
-            "Mengerjakan TP Mobpro",
-            "kerjakan sebelum jam praktikum",
-            "20 Maret 2026"
-        ),
+class MainViewModel(dao: TaskDao) : ViewModel() {
+
+    val data: StateFlow<List<Task>> = dao.getTask().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = emptyList()
     )
 
     fun getTugas(id: Long): Task? {
-        return data.find { it.id == id }
+        return data.value.find { it.id == id }
     }
 }
