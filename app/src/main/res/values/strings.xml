@@ -5,6 +5,7 @@
     <string name="tambah_task">Tambah tugas</string>
     <string name="judul">judul</string>
     <string name="isi_deskripsi">Deskripsi</string>
+    <string name="isi_deadline">Deadline</string>
     <string name="kembali">Kembali</string>
     <string name="simpan">Simpan</string>
     <string name="edit_Tugas">Ubah tugas</string>

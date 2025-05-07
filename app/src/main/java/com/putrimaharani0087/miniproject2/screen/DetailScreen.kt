@@ -46,12 +46,14 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
 
     var judul by remember { mutableStateOf("") }
     var deskripsi by remember { mutableStateOf("") }
+    var deadline by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         if (id == null) return@LaunchedEffect
         val data = viewModel.getTugas(id) ?: return@LaunchedEffect
         judul = data.judul
         deskripsi = data.deskripsi
+        deadline = data.deadline
     }
 
     Scaffold(
@@ -98,6 +100,8 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
             onTitleChange = {judul = it},
             desc = deskripsi,
             onDescChange = {deskripsi = it},
+            deadline = deadline,
+            onDeadlineChange = {deadline = it},
             modifier = Modifier.padding(padding)
         )
     }
@@ -107,6 +111,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
 fun FormTugas(
     title: String, onTitleChange: (String) -> Unit,
     desc: String, onDescChange: (String) -> Unit,
+    deadline: String, onDeadlineChange: (String) -> Unit,
     modifier: Modifier
 ) {
     Column(
@@ -128,6 +133,16 @@ fun FormTugas(
             value = desc,
             onValueChange = {onDescChange(it)},
             label = { Text(text = stringResource(R.string.isi_deskripsi)) },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = deadline,
+            onValueChange = {onDeadlineChange(it)},
+            label = { Text(text = stringResource(R.string.isi_deadline)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
