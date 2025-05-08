@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -96,12 +99,12 @@ fun MainScreen(navController: NavHostController) {
             }
         }
     ) { innerpadding ->
-        ScreenContent(Modifier.padding(innerpadding), navController)
+        ScreenContent(showList, Modifier.padding(innerpadding), navController)
     }
 }
 
 @Composable
-fun ScreenContent(modifier: Modifier = Modifier, navController: NavHostController) {
+fun ScreenContent(showList: Boolean, modifier: Modifier = Modifier, navController: NavHostController) {
     val context = LocalContext.current
     val factory = ViewModelFactory(context)
 
@@ -123,18 +126,37 @@ fun ScreenContent(modifier: Modifier = Modifier, navController: NavHostControlle
 
     }
     else {
-        LazyColumn(
-            modifier = modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 84.dp)
-        ) {
-            items(data) {
-                ListItem(task = it) {
-                    navController.navigate(Screen.FormUbah.withId(it.id))
+        if (showList) {
+            LazyColumn(
+                modifier = modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 84.dp)
+            ) {
+                items(data) {
+                    ListItem(task = it) {
+                        navController.navigate(Screen.FormUbah.withId(it.id))
+                    }
                 }
             }
         }
+        else {
+            LazyVerticalStaggeredGrid(
+                modifier = modifier.fillMaxSize(),
+                columns = StaggeredGridCells.Fixed(2),
+                verticalItemSpacing = 8.dp,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 84.dp)
+            ) {
+                items(data) {
+                    GridItem(task = it) {
+                        navController.navigate(Screen.FormUbah.withId(it.id))
+                    }
+                }
+            }
+
+        }
     }
 }
+
 
 @Composable
 fun ListItem(
@@ -173,6 +195,37 @@ fun ListItem(
             Text(
                 text = task.deadline,
                 color = Color.Black
+            )
+        }
+    }
+}
+
+@Composable
+fun GridItem(task: Task, onClick: () -> Unit) {
+    Card (
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFFE4DED9),
+        ),
+    ){
+        Column(
+            modifier = Modifier.padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = task.judul,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = task.deskripsi,
+                maxLines = 4,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = task.deadline
             )
         }
     }
