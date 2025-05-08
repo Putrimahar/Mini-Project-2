@@ -52,6 +52,8 @@ import com.putrimaharani0087.miniproject2.util.ViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,7 +116,14 @@ fun ScreenContent(showList: Boolean, modifier: Modifier = Modifier, navControlle
     val factory = ViewModelFactory(context)
 
     val viewModel: MainViewModel = viewModel(factory = factory)
-    val data by viewModel.data.collectAsState()
+    val rawData by viewModel.data.collectAsState()
+    val data = rawData.sortedBy { task ->
+        try {
+            SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID")).parse(task.deadline)
+        } catch (e: Exception) {
+            null // fallback jika parsing gagal
+        }
+    }
 
     if (data.isEmpty()) {
         Column(
@@ -220,13 +229,13 @@ fun GridItem(task: Task, onClick: () -> Unit) {
         ) {
             Text(
                 text = task.judul,
-                maxLines = 2,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 text = task.deskripsi,
-                maxLines = 4,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
