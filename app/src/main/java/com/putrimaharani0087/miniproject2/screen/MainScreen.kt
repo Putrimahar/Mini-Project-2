@@ -29,9 +29,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,13 +47,17 @@ import com.putrimaharani0087.miniproject2.R
 import com.putrimaharani0087.miniproject2.model.Task
 import com.putrimaharani0087.miniproject2.navigation.Screen
 import com.putrimaharani0087.miniproject2.ui.theme.MiniProject2Theme
+import com.putrimaharani0087.miniproject2.util.SettingsDataStore
 import com.putrimaharani0087.miniproject2.util.ViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController) {
-    var showList by remember { mutableStateOf(true) }
-
+    val dataStore = SettingsDataStore(LocalContext.current)
+    val showList by dataStore.layoutFlow.collectAsState(true)
     Scaffold(
         topBar = {
             TopAppBar(
@@ -68,7 +69,11 @@ fun MainScreen(navController: NavHostController) {
                     titleContentColor = Color.Black
                 ),
                 actions = {
-                    IconButton(onClick = {showList = !showList}) {
+                    IconButton(onClick = {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            dataStore.saveLayout(!showList)
+                        }
+                    }) {
                         Icon(
                             painter = painterResource(
                                 if (showList) R.drawable.baseline_grid_view_24
@@ -193,7 +198,7 @@ fun ListItem(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = task.deadline,
+                text = "Deadline: ${task.deadline}",
                 color = Color.Black
             )
         }
@@ -225,7 +230,7 @@ fun GridItem(task: Task, onClick: () -> Unit) {
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = task.deadline
+                text = "Deadline: ${task.deadline}"
             )
         }
     }
