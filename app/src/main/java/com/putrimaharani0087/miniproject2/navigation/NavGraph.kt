@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import com.putrimaharani0087.miniproject2.screen.DetailScreen
 import com.putrimaharani0087.miniproject2.screen.KEY_ID_TASK
 import com.putrimaharani0087.miniproject2.screen.MainScreen
+import com.putrimaharani0087.miniproject2.screen.RecycleBinScreen
 
 @Composable
 fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
@@ -33,5 +34,9 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
             val id = navBackStackEntry.arguments?.getLong(KEY_ID_TASK)
             DetailScreen(navController, id)
         }
+        composable(Screen.RecycleBin.route) {
+            RecycleBinScreen(navController)
+        }
+
     }
 }

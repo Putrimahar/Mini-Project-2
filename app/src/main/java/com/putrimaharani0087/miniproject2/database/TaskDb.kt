@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.putrimaharani0087.miniproject2.model.Task
 
-@Database(entities = [Task::class], version = 1, exportSchema = false)
+@Database(entities = [Task::class], version = 2, exportSchema = false)
 abstract class TaskDb : RoomDatabase() {
 
     abstract val dao : TaskDao
@@ -25,7 +25,9 @@ abstract class TaskDb : RoomDatabase() {
                         context.applicationContext,
                         TaskDb::class.java,
                         "task.db"
-                    ).build()
+                    )
+                        .fallbackToDestructiveMigration()
+                        .build()
                     INSTANCE = instance
                 }
                 return instance

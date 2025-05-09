@@ -9,5 +9,6 @@ data class Task(
     val id: Long = 0L,
     val judul: String,
     val deskripsi: String,
-    val deadline: String
+    val deadline: String,
+    val isDeleted: Boolean = false
 )

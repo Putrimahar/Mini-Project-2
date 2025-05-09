@@ -16,13 +16,15 @@ interface TaskDao {
     @Update
     suspend fun update(task: Task)
 
-    @Query("SELECT * FROM task ORDER BY deadline DESC")
+    @Query("SELECT * FROM task WHERE isDeleted = 0 ORDER BY deadline DESC")
     fun getTask(): Flow<List<Task>>
+
+    @Query("SELECT * FROM task WHERE isDeleted = 1 ORDER BY deadline DESC")
+    fun getDeletedTasks(): Flow<List<Task>>
 
     @Query("SELECT * FROM task WHERE id = :id")
     suspend fun getTaskById(id: Long): Task?
 
     @Query("DELETE FROM task WHERE id = :id")
     suspend fun deleteById(id: Long)
-
 }

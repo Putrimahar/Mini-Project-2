@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">TaskMe</string>
     <string name="list_kosong">Daftar tugas masih kosong \nTekan tombol + untuk menambahkan</string>
+    <string name="list_recycle">Tidak ada tugas yang dihapus</string>
     <string name="x_diklik">%1$s diklik!</string>
     <string name="tambah_task">Tambah tugas</string>
     <string name="judul">judul</string>
@@ -17,4 +18,5 @@
     <string name="tombol_batal">Batal</string>
     <string name="list">Tampilan list</string>
     <string name="grid">Tanpilan grid</string>
+    <string name="recycle_bin">Recycle Bin</string>
 </resources>

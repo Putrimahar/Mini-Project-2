@@ -50,6 +50,7 @@ import com.putrimaharani0087.miniproject2.util.ViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import com.putrimaharani0087.miniproject2.model.Task
 
 const val KEY_ID_TASK = "idTask"
 
@@ -144,9 +145,18 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                 }
             ) {
                 showDialog = false
-                viewModel.delete(id)
+                viewModel.softDelete(
+                    Task(
+                        id = id,
+                        judul = judul,
+                        deskripsi = deskripsi,
+                        deadline = deadline,
+                        isDeleted = true
+                    )
+                )
                 navController.popBackStack()
             }
+
         }
     }
 }
